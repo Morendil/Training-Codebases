@@ -17,7 +17,7 @@ public class CleanMethodTest extends CleanTestBase {
   
   @Parameters
   public static Collection<Object[]> getMethodsToTest() throws Exception {
-    classLister = new ModuleLister("");
+    classLister = new ModuleMetricCollector("");
     return classLister.getAllMethodMetricsAsList();
   }
 

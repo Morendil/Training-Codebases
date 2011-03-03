@@ -16,7 +16,7 @@ import cyvis.metric.ClassMetric;
 public class CleanClassTest extends CleanTestBase {
   @Parameters
    public static Collection<Object[]> getClassesToTest() throws Exception {
-     classLister = new ModuleLister("");
+     classLister = new ModuleMetricCollector("");
      return getAllClassMetrics();
    }
   
