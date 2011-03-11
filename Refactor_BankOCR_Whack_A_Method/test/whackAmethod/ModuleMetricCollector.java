@@ -1,17 +1,12 @@
 package whackAmethod;
 
-import java.io.BufferedInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
-import cyvis.core.MetricExtractor;
-
 public class ModuleMetricCollector {
-  private MetricExtractor metricExtractor;
+  private ClassMetricCollector classMetricCollector;
   private MethodMetricCollector methodLister;
-  private RecursiveClassFileFinder classFileFinder;
   
   private List<File> classFiles;
   private List<Object[]> metricsForAllClasses;
@@ -20,15 +15,16 @@ public class ModuleMetricCollector {
   
   public ModuleMetricCollector(String startingDirectory) throws Exception {
     this.startingDirectory = startingDirectory;
-    metricExtractor = new MetricExtractor();
-    collectClasses();
+    this.classMetricCollector = new ClassMetricCollector();
+    metricsForAllClasses = new ArrayList<Object[]>(); 
+    
+    collectClassFiles();
+    collectClassMetrics();
     collectMethods();
   }
 
-  private void collectClasses() throws Exception {
-    metricsForAllClasses = new ArrayList<Object[]>(); 
-    discoverListOfClassFiles();
-    mapClassMetricsTo2DArray();
+  private void collectClassFiles() throws Exception {
+    classFiles = new RecursiveClassFileFinder(startingDirectory).getClassFiles();
   }
 
   private void collectMethods() throws Exception {
@@ -36,20 +32,10 @@ public class ModuleMetricCollector {
     classesTimesMethodsAsList = methodLister.collectAllClassMetricsAndMethodMetrics();
   }
 
-  private void mapClassMetricsTo2DArray() throws Exception {
+  private void collectClassMetrics() throws Exception {
     for (File classFile : classFiles) {
-      getAllMetricsForThisClass(classFile);
+      metricsForAllClasses.add(new Object[] { classMetricCollector.addMethodMetricsForClass(classFile) });
     }
-  }
-
-  private void getAllMetricsForThisClass(File classFile) throws FileNotFoundException {
-    BufferedInputStream inputStreamForClassFile = new InputStreamBuilder().getInputStreamForClass(classFile);
-    metricsForAllClasses.add(new Object[] {metricExtractor.getClassMetric(inputStreamForClassFile)});
-  }
-
-  private void discoverListOfClassFiles() throws Exception {
-    classFileFinder = new RecursiveClassFileFinder(startingDirectory);
-    classFiles = classFileFinder.getClassFiles();
   }
 
   public List<Object[]> getClassMetricsAsList() {

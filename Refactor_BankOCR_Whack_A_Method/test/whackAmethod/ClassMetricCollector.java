@@ -20,11 +20,13 @@ public class ClassMetricCollector {
     methodMetricsForClass = new ArrayList<Object[]>();
   }
   
-  public void addMethodMetricsForClass(File file) throws Exception {
+  public ClassMetric addMethodMetricsForClass(File file) throws Exception {
     BufferedInputStream inputStreamForClassFile = new InputStreamBuilder().getInputStreamForClass(file);
     classMetric = metricExtractor.getClassMetric(inputStreamForClassFile);
     methodMetrics = getMethodMetricsForClass(classMetric);
     methodMetricsForClass = addMethodMetricsForClass(classMetric);
+    
+    return classMetric;
   }
   
   private List<MethodMetric> getMethodMetricsForClass(ClassMetric classMetric) throws Exception {

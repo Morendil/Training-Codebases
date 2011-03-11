@@ -24,6 +24,14 @@ public class RecursiveClassFileFinder {
     Collections.sort(result);
     return result;
   }
+  
+  private List<File> addAllDirectoriesBelow(List<File> listOfFilesAndDirsSoFar, File file) throws Exception {
+    if (isDirectory(file)) {
+      List<File> deeperList = getAllClassFilesAndDirsInDirectory(file);
+      listOfFilesAndDirsSoFar.addAll(deeperList);
+    }
+    return listOfFilesAndDirsSoFar;
+  }
 
   private List<File> getAllClassFilesAndDirsInDirectory(File currentDirectory) throws Exception {
     List<File> listOfFilesAndDirsSoFar = new ArrayList<File>();
@@ -39,18 +47,6 @@ public class RecursiveClassFileFinder {
 
   private List<File> addClassFile(List<File> listOfFilesAndDirsSoFar, File file) {
     if (file.getName().contains(CLASS_FILE_SUFFIX))  listOfFilesAndDirsSoFar.add(file);
-    return listOfFilesAndDirsSoFar;
-  }
-  
-  private List<File> addAllDirectoriesBelow(List<File> listOfFilesAndDirsSoFar, File file) throws Exception {
-    if (isDirectory(file))  return recurseBelow(listOfFilesAndDirsSoFar, file);
-    return listOfFilesAndDirsSoFar;
-  }
-
-  private List<File> recurseBelow(List<File> listOfFilesAndDirsSoFar, File file) throws Exception {
-    List<File> deeperList = getAllClassFilesAndDirsInDirectory(file);
-    listOfFilesAndDirsSoFar.addAll(deeperList);
-    
     return listOfFilesAndDirsSoFar;
   }
 

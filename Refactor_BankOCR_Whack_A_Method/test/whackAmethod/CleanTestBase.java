@@ -7,8 +7,8 @@ import cyvis.metric.ClassMetric;
 import cyvis.metric.MethodMetric;
 
 public class CleanTestBase {
-  public static final int MAX_METHODS_PER_CLASS = 7;
-  public static final int MIN_METHODS_PER_CLASS = 2;
+  public static final int MAX_METHODS_PER_CLASS = 9;
+  public static final int MIN_METHODS_PER_CLASS = 3;
   public static final int MAX_METHOD_COMPLEXITY = 4;
   public static final int MAX_BYTECODE_STATEMENTS = 42; //Thank you Douglas Adams!
   
