@@ -1,8 +1,20 @@
 package editor;
 
+import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+
+import org.junit.Before;
+import org.junit.Test;
+
 
 
 public class EndOfLineTrimmingTest {
+  private EndOfLineTrimmer eolTrimmer;
+
+  @Before
+  public void setup() {
+    eolTrimmer = new EndOfLineTrimmer();
+  }
   
   /*
    * When editing text files, like source code, one often happens to add 
@@ -15,10 +27,11 @@ public class EndOfLineTrimmingTest {
       given an input string, produces a right-trimmed output string.
       
       Here are some tests that you could write (remember Beck's Test List technique):
-      
-      "abc   " -> "abc"
-      "def\t " -> "def"
-      "  cde" -> "  cde" (does not remove beginning whitespace)
+
+      "   "        -> "   "
+      "abc   "     -> "abc"
+      "def\t "     -> "def"
+      "  cde"      -> "  cde" (does not remove beginning whitespace)
       "ab\n cd \n" -> "ab\n cd\n" (removes whitespace for each line)
       "ab\r\ncd\n" -> "ab\r\ncd\n" (handles both Windows and Unix line endings)
       
@@ -26,5 +39,32 @@ public class EndOfLineTrimmingTest {
       with others in any combination? 
    * 
    */
+  
+  @Test
+  public void givenOnlyLeadingSpaces_WillIgnoreThem() throws Exception {
+    assertEquals("   abc", eolTrimmer.trim("   abc"));
+  }
+  
+  @Test
+  public void givenSpacesFollowedByTabs_CanRemoveThemAll() throws Exception {
+    assertEquals("abc", eolTrimmer.trim("abc     \t\t\t"));
+  }
+  
+  @Test
+  public void givenTabsFollowedBySpaces_CanRemoveThemAll() throws Exception {
+    assertEquals("abc", eolTrimmer.trim("abc\t\t\t     "));
+  }
+  
+  @Test
+  public void given_OnlyTrailingSpaces_CanRemoveThem() throws Exception {
+    assertEquals("abc", eolTrimmer.trim("abc   "));
+  }
+  
+  @Test
+  public void givenEmpty_CanReturnEmpty() throws Exception {
+    assertEquals("", eolTrimmer.trim(""));
+  }
+  
+
   
 }
